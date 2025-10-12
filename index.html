@@ -1,397 +1,680 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <title>Shop Bán Điện Thoại</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #f0f2f5;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Bán Điện Thoại Chuyên Nghiệp</title>
+    <style>
+        /* === RESET & BASE === */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f6f9;
+            color: #333;
+        }
 
-    header, footer {
-      background: linear-gradient(90deg, #1e90ff, #005eff);
-      color: #fff;
-      padding: 15px;
-      border-radius: 8px;
-      text-align: center;
-    }
+        /* === HEADER & NAVIGATION === */
+        header {
+            background: #ffffff; /* Nền trắng hiện đại */
+            border-bottom: 2px solid #007bff; /* Viền dưới màu xanh chủ đạo */
+            padding: 10px 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-    h1, h2 {
-      margin: 0 0 10px;
-    }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
 
-    main {
-      display: flex;
-      gap: 20px;
-      margin-top: 20px;
-      min-height: 80vh;
-    }
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #007bff; /* Màu xanh nổi bật */
+            font-weight: 700;
+        }
 
-    /* Bên trái - Danh sách sản phẩm */
-    #product-list {
-      flex: 3;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 30px;
+            max-width: 500px;
+        }
 
-    /* Bên phải - Giỏ hàng + thanh toán + hóa đơn */
-    .sidebar {
-      flex: 1;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      background: #fff;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      display: none; /* Ẩn mặc định */
-    }
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            outline: none;
+            font-size: 16px;
+        }
 
-    .product {
-      background: #fff;
-      border-radius: 10px;
-      padding: 10px;
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+        .top-buttons {
+            display: flex;
+            gap: 15px;
+        }
 
-    .product:hover {
-      transform: translateY(-5px);
-    }
+        .top-buttons button {
+            background: #007bff; /* Màu xanh chủ đạo */
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+        }
 
-    .product img {
-      width: 100%;
-      height: 170px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
+        .top-buttons button:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
 
-    .product-details {
-      flex-grow: 1;
-    }
+        /* Nav Menu Bar */
+        nav {
+            background: #007bff;
+            padding: 10px 30px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
 
-    button {
-      background-color: #1e90ff;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: background-color 0.3s;
-      width: 100%;
-      font-weight: bold;
-    }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: flex-start;
+            gap: 25px;
+        }
 
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 5px 0;
+            transition: 0.3s;
+        }
 
-    button:hover:not(:disabled) {
-      background-color: #0a70d1;
-    }
+        nav a:hover {
+            color: #ffc107;
+        }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
 
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: center;
-    }
+        /* === LOGIN/ADMIN FORMS (Sử dụng CSS cũ cho chức năng) === */
+        .login-form {
+            display: none;
+            position: fixed;
+            right: 20px;
+            top: 150px; /* Di chuyển xuống để tránh header */
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            padding: 20px;
+            width: 300px;
+            z-index: 999;
+            animation: fadeIn 0.3s;
+            border-top: 5px solid #007bff;
+        }
 
-    select {
-      padding: 8px 12px;
-      margin-top: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      width: 100%;
-    }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-    .invoice {
-      border: 2px dashed #333;
-      background: #f9f9f9;
-      max-height: 400px;
-      overflow-y: auto;
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 8px;
-    }
+        .close-btn:hover {
+            color: #333;
+        }
 
-  </style>
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(-10px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        .login-form input, #admin-panel input {
+            width: 95%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .login-form button {
+            background: #007bff;
+            transition: 0.3s;
+        }
+        
+        .login-form button:hover {
+            background: #0056b3;
+        }
+        /* === MAIN CONTENT === */
+        main {
+            display: flex;
+            padding: 20px 30px;
+            gap: 20px;
+            min-height: 80vh;
+        }
+        
+        /* Sidebar (Cart) */
+        .sidebar {
+            flex: 0 0 300px; /* Cố định chiều rộng */
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 150px; /* Cố định khi cuộn */
+            height: fit-content;
+            display: none;
+        }
+
+        .sidebar h2 {
+            color: #dc3545; /* Màu đỏ cho giỏ hàng */
+            border-bottom: 2px solid #dc3545;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .sidebar table {
+            font-size: 14px;
+        }
+        
+        .sidebar button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+        
+        .sidebar button:hover {
+            background: #c82333;
+        }
+
+        /* Product List */
+        #product-list-container {
+            flex: 1;
+        }
+
+        #product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .product {
+            background: #fff;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .product img {
+            width: 90%;
+            height: 180px;
+            object-fit: contain; /* Giữ tỷ lệ ảnh mà không bị cắt */
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+            padding: 5px;
+        }
+
+        .product h3 {
+            font-size: 16px;
+            color: #007bff;
+            margin: 5px 0;
+        }
+
+        .product .price {
+            font-size: 18px;
+            color: #dc3545;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+        
+        .product .stock {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .product button {
+            background: #28a745; /* Màu xanh lá cho Mua */
+            transition: 0.3s;
+            padding: 10px;
+        }
+
+        .product button:hover {
+            background: #1e7e34;
+        }
+
+        .product button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        /* Sort & Filter Panel */
+        .sort-filter-bar {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .sort-filter-bar label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .sort-filter-bar select {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Admin Panel */
+        #admin-panel {
+            top: 250px; /* Đặt panel admin thấp hơn */
+        }
+        
+        #admin-panel button {
+            background: #007bff;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        
+        #admin-panel button:hover {
+            background: #0056b3;
+        }
+
+        /* Footer */
+        footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-
 <header>
-  <h1>📱 Shop Bán Điện Thoại</h1>
+    <div class="header-top">
+        <h1>📱 Shop Điện Thoại KHOIVAN VIP</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="Tìm kiếm sản phẩm, hãng..." />
+        </div>
+        <div class="top-buttons">
+            <button onclick="toggleForm('user')">👤 Đăng nhập</button>
+            <button onclick="toggleForm('admin')">🔑 Admin</button>
+        </div>
+    </div>
 </header>
+<nav>
+    <ul>
+        <li><a href="#">Trang chủ</a></li>
+        <li><a href="#">iPhone</a></li>
+        <li><a href="#">Samsung</a></li>
+        <li><a href="#">Oppo</a></li>
+        <li><a href="#">Xiaomi</a></li>
+        <li><a href="#">Phụ kiện</a></li>
+    </ul>
+</nav>
+
+<div id="user-login" class="login-form">
+    <span class="close-btn" onclick="toggleForm('')">×</span>
+    <h3>👤 Đăng nhập Người dùng</h3>
+    <input type="text" id="user-name" placeholder="Tên người dùng" />
+    <input type="password" id="user-pass" placeholder="Mật khẩu" />
+    <button onclick="loginUser()">Đăng nhập</button>
+    <p style="text-align:center; margin-top:10px; font-size:14px;">Chưa có tài khoản? <a href="#" style="color:#007bff;">Đăng ký</a></p>
+</div>
+
+<div id="admin-login" class="login-form">
+    <span class="close-btn" onclick="toggleForm('')">×</span>
+    <h3>🔑 Đăng nhập Quản trị viên</h3>
+    <input type="text" id="admin-username" placeholder="Tài khoản" />
+    <input type="password" id="admin-password" placeholder="Mật khẩu" />
+    <button onclick="loginAdmin()">Đăng nhập</button>
+</div>
+
+<div id="admin-panel" class="login-form">
+    <h3>➕ Thêm sản phẩm</h3>
+    <input type="text" id="newName" placeholder="Tên sản phẩm" />
+    <input type="number" id="newPrice" placeholder="Giá (VND)" />
+    <input type="text" id="newBrand" placeholder="Hãng" />
+    <input type="number" id="newStock" placeholder="Tồn kho" />
+    <input type="text" id="newImg" placeholder="Link hình ảnh" />
+    <button onclick="addProduct()">Thêm sản phẩm</button>
+</div>
 
 <main>
-  <div id="product-list"></div>
-
-  <div class="sidebar" id="sidebar">
-    <div class="cart">
-      <h2>🛒 Giỏ hàng</h2>
-      <table id="cart-table">
-        <thead>
-          <tr>
-            <th>Tên</th>
-            <th>Giá</th>
-            <th>Số lượng</th>
-            <th>Thành tiền</th>
-            <th>Xóa</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <h3>Tổng cộng: <span id="total">0</span> VND</h3>
+    <div id="product-list-container">
+        <div class="sort-filter-bar">
+            <label for="sort-by">Sắp xếp:</label>
+            <select id="sort-by" onchange="sortAndFilter()">
+                <option value="default">Mới nhất</option>
+                <option value="price-asc">Giá tăng dần</option>
+                <option value="price-desc">Giá giảm dần</option>
+                <option value="name-asc">Tên (A-Z)</option>
+            </select>
+            
+            <label for="filter-brand">Lọc theo hãng:</label>
+            <select id="filter-brand" onchange="sortAndFilter()">
+                <option value="all">Tất cả</option>
+                <option value="Apple">Apple</option>
+                <option value="Samsung">Samsung</option>
+                <option value="Oppo">Oppo</option>
+                <option value="Xiaomi">Xiaomi</option>
+                </select>
+        </div>
+        
+        <div id="product-list"></div>
     </div>
-
-    <div class="checkout">
-      <h2>💳 Thanh toán</h2>
-      <label for="payment">Chọn phương thức:</label>
-      <select id="payment">
-        <option value="cod">Thanh toán khi nhận hàng (COD)</option>
-        <option value="bank">Chuyển khoản ngân hàng</option>
-        <option value="momo">Ví MoMo</option>
-      </select>
-      <br />
-      <button onclick="checkout()">Xác nhận đặt hàng</button>
+    
+    <div class="sidebar" id="sidebar">
+        <h2>🛒 Giỏ hàng của bạn</h2>
+        <table>
+            <thead><tr><th>Tên</th><th>Giá</th><th>SL</th><th>Xóa</th></tr></thead>
+            <tbody id="cart-body"></tbody>
+        </table>
+        <h3>Tổng: <span id="total">0 ₫</span></h3>
+        <button onclick="checkout()">Thanh toán ngay</button>
     </div>
-
-    <div id="invoice" class="invoice" style="display:none;"></div>
-  </div>
 </main>
 
 <footer>
-  <p>© 2025 Shop Điện Thoại - All rights reserved.</p>
+    © 2025 Shop Điện Thoại VIP - Powered by AI.
 </footer>
 
 <script>
-const products = [
-  {id:"DT01", name:"iPhone 14 Pro Max", price:30000000, brand:"Apple", stock:10, img:"https://i5.walmartimages.com/seo/Used-Apple-iPhone-14-Pro-Max-256GB-Deep-Purple-Unlocked-MQ8W3LL-A-Used-Good-Condition_cb8f75e5-1b8e-4c06-9776-0d995a314ada.88ab53492f6fe7e653033585616419b1.jpeg"},
-  {id:"DT02", name:"iPhone 13 Pro Max", price:27000000, brand:"Apple", stock:8, img:"https://cdn2.cellphones.com.vn/x/media/catalog/product/i/p/iphone-13-pro-max-128gb-cu-dep_3_.png"},
-  {id:"DT03", name:"iPhone 12", price:18000000, brand:"Apple", stock:6, img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0Z4T-PFqYi0GSde_m8PtXMTDYpEbRYdFHzg&s"},
-  {id:"DT04", name:"iPhone SE 2022", price:12000000, brand:"Apple", stock:7, img:"https://www.didongmy.com/vnt_upload/product/04_2020/thumbs/(600x600)_iphone_se_2020_do.png"},
-  {id:"DT05", name:"iPhone 11", price:10000000, brand:"Apple", stock:9, img:"https://cdn.tgdd.vn/Products/Images/42/153856/iphone-11-trang-600x600.jpg"},
-  {id:"DT06", name:"Samsung Galaxy S23 Ultra", price:28000000, brand:"Samsung", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/249948/samsung-galaxy-s23-ultra-green-thumbnew-600x600.jpg"},
-  {id:"DT07", name:"Samsung Galaxy Z Fold 4", price:35000000, brand:"Samsung", stock:4, img:"https://cdn.tgdd.vn/Products/Images/42/250625/samsung-galaxy-z-fold4-kem-256gb-600x600.jpg"},
-  {id:"DT08", name:"iPhone 17 Pro Max", price:22000000, brand:"Apple", stock:5, img:"https://cdn.xtmobile.vn/vnt_upload/product/09_2025/thumbs/600_iPhone_17_Pro_cam_1_1.jpg"},
-  {id:"DT09", name:"Samsung Galaxy A73", price:12000000, brand:"Samsung", stock:8, img:"https://cdn.tgdd.vn/Products/Images/42/246195/samsung-galaxy-a73-1-600x600.jpg"},
-  {id:"DT10", name:"Samsung Galaxy S21 FE", price:15000000, brand:"Samsung", stock:6, img:"https://cdn.tgdd.vn/Products/Images/42/267211/Samsung-Galaxy-S21-FE-vang-1-2-600x600.jpg"},
-  {id:"DT11", name:"Oppo Reno8 Pro", price:13000000, brand:"Oppo", stock:7, img:"https://cdn.tgdd.vn/Products/Images/42/260546/oppo-reno8-pro-thumb-xanh-1-600x600.jpg"},
-  {id:"DT12", name:"Oppo Find X5 Pro", price:22000000, brand:"Oppo", stock:3, img:"https://cdn.tgdd.vn/Products/Images/42/250622/oppo-find-x5-pro-trang-thumb-1-600x600.jpg"},
-  {id:"DT13", name:"Oppo A96", price:8000000, brand:"Oppo", stock:9, img:"https://cdn.tgdd.vn/Products/Images/42/274381/oppo-a96-4g-260423-013718-600x600.jpg"},
-  {id:"DT14", name:"Oppo Reno7", price:10000000, brand:"Oppo", stock:8, img:"https://cdn.tgdd.vn/Products/Images/42/274721/OPPO-Reno7-4G-Thumb-cam-1-600x600.jpg"},
-  {id:"DT15", name:"Xiaomi 12T Pro", price:16000000, brand:"Xiaomi", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/279066/xiaomi-12t-pro-thumb-bac-1-600x600.jpg"},
-  {id:"DT16", name:"Xiaomi 11T", price:10000000, brand:"Xiaomi", stock:7, img:"https://cdn.tgdd.vn/Products/Images/42/254158/xiaomi-11t-xanh-thumb-600x600.jpg"},
-  {id:"DT17", name:"Xiaomi Redmi Note 11", price:7000000, brand:"Xiaomi", stock:9, img:"https://cdn.tgdd.vn/Products/Images/42/280339/xiaomi-redmi-note-11-1-600x600.jpg"},
-  {id:"DT18", name:"Vivo X80 Pro", price:23000000, brand:"Vivo", stock:5, img:"https://cdn.tgdd.vn/Products/Images/42/269329/vivo-x80-pro-den-thumb-600x600.jpg"},
-  {id:"DT19", name:"Vivo Y15", price:4500000, brand:"Vivo", stock:12, img:"https://cdn.tgdd.vn/Products/Images/42/216073/vivo-y15-thumb-den-600x600.jpg"},
-  {id:"DT20", name:"Realme 11 Pro+", price:16000000, brand:"Realme", stock:6, img:"https://cdn.tgdd.vn/Products/Images/42/279307/realme-11-pro-plus-2-600x600.jpg"}
-];
+    const ADMIN_USER = "admin";
+    const ADMIN_PASS = "123456";
+    let isAdmin = false;
 
-let cart = {};
+    let products = [
+{id:"DT01", name:"iPhone 14 Pro Max", price:30000000, brand:"Apple", stock:10, img:"https://i5.walmartimages.com/seo/Used-Apple-iPhone-14-Pro-Max-256GB-Deep-Purple-Unlocked-MQ8W3LL-A-Used-Good-Condition_cb8f75e5-1b8e-4c06-9776-0d995a314ada.88ab53492f6fe7e653033585616419b1.jpeg"},
+{id:"DT02", name:"iPhone 13 Pro Max", price:27000000, brand:"Apple", stock:10, img:"https://cdn2.cellphones.com.vn/x/media/catalog/product/i/p/iphone-13-pro-max-128gb-cu-dep_3_.png"},
+{id:"DT03", name:"iPhone 12", price:18000000, brand:"Apple", stock:10, img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0Z4T-PFqYi0GSde_m8PtXMTDYpEbRYdFHzg&s"},
+{id:"DT04", name:"iPhone SE 2022", price:12000000, brand:"Apple", stock:10, img:"https://www.didongmy.com/vnt_upload/product/04_2020/thumbs/(600x600)_iphone_se_2020_do.png"},
+{id:"DT05", name:"iPhone 11", price:10000000, brand:"Apple", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/153856/iphone-11-trang-600x600.jpg"},
+{id:"DT06", name:"Samsung Galaxy S23 Ultra", price:28000000, brand:"Samsung", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/249948/samsung-galaxy-s23-ultra-green-thumbnew-600x600.jpg"},
+{id:"DT07", name:"Samsung Galaxy Z Fold 4", price:35000000, brand:"Samsung", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/250625/samsung-galaxy-z-fold4-kem-256gb-600x600.jpg"},
+{id:"DT08", name:"iPhone 17 Pro Max", price:22000000, brand:"Apple", stock:10, img:"https://cdn.xtmobile.vn/vnt_upload/product/09_2025/thumbs/600_iPhone_17_Pro_cam_1_1.jpg"},
+{id:"DT09", name:"Samsung Galaxy A73", price:12000000, brand:"Samsung", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/246195/samsung-galaxy-a73-1-600x600.jpg"},
+{id:"DT10", name:"Samsung Galaxy S21 FE", price:15000000, brand:"Samsung", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/267211/Samsung-Galaxy-S21-FE-vang-1-2-600x600.jpg"},
+{id:"DT11", name:"Oppo Reno8 Pro", price:13000000, brand:"Oppo", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/260546/oppo-reno8-pro-thumb-xanh-1-600x600.jpg"},
+{id:"DT12", name:"Oppo Find X5 Pro", price:22000000, brand:"Oppo", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/250622/oppo-find-x5-pro-trang-thumb-1-600x600.jpg"},
+{id:"DT13", name:"Oppo A96", price:8000000, brand:"Oppo", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/274381/oppo-a96-4g-260423-013718-600x600.jpg"},
+{id:"DT14", name:"Oppo Reno7", price:10000000, brand:"Oppo", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/274721/OPPO-Reno7-4G-Thumb-cam-1-600x600.jpg"},
+{id:"DT15", name:"Xiaomi 12T Pro", price:16000000, brand:"Xiaomi", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/279066/xiaomi-12t-pro-thumb-bac-1-600x600.jpg"},
+{id:"DT16", name:"Xiaomi 11T", price:10000000, brand:"Xiaomi", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/248293/Xiaomi-11T-White-1-2-3-600x600.jpg"},
+{id:"DT17", name:"Xiaomi Redmi Note 12 Pro", price:9000000, brand:"Xiaomi", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/299734/xiaomi-redmi-12-pro-4g-thumb-600x600.jpg"},
+{id:"DT18", name:"Xiaomi Mi 11 Lite", price:7500000, brand:"Xiaomi", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/233241/xiaomi-mi-11-lite-4g-blue-600x600.jpg"},
+{id:"DT19", name:"Vivo V23 5G", price:10000000, brand:"Vivo", stock:10, img:"https://cdn.tgdd.vn/Products/Images/42/264034/vivo-V23-5G-5-1-2-600x600.jpg"},
+{id:"DT20", name:"Realme 9 Pro+", price:8500000, brand:"Realme", stock:10, img:"https://cdn2.cellphones.com.vn/x/media/catalog/product/9/_/9_ro_plus_3_1_1.png"}
+    ];
 
-const productList = document.getElementById('product-list');
-const sidebar = document.getElementById('sidebar');
-const cartTableBody = document.querySelector('#cart-table tbody');
-const totalSpan = document.getElementById('total');
-const invoiceDiv = document.getElementById('invoice');
-const paymentSelect = document.getElementById('payment');
+    let cart = {};
 
-function formatPrice(price) {
-  return price.toLocaleString('vi-VN') + ' ₫';
-}
+    function formatPrice(price){ return price.toLocaleString('vi-VN') + ' ₫'; }
 
-function renderProducts() {
-  let html = '';
-  for (const product of products) {
-    html += `
-      <div class="product">
-        <img src="${product.img}" alt="${product.name}" />
-        <div class="product-details">
-          <h3>${product.name}</h3>
-          <p>Giá: ${formatPrice(product.price)}</p>
-          <p>Hãng: ${product.brand}</p>
-          <p>Còn lại: ${product.stock} cái</p>
-        </div>
-        <button onclick="addToCart('${product.id}')">Thêm vào giỏ hàng</button>
-      </div>
-    `;
-  }
-  productList.innerHTML = html;
-}
+    /* === CHỨC NĂNG CHÍNH === */
 
-function addToCart(id) {
-  const product = products.find(p => p.id === id);
-  if (!product) return alert("Sản phẩm không tồn tại");
-
-  if (cart[id]) {
-    if (cart[id] < product.stock) {
-      cart[id]++;
-    } else {
-      alert(`Sản phẩm ${product.name} chỉ còn ${product.stock} cái.`);
-      return;
+    // Ẩn/hiện Form và Nút Đóng
+    function toggleForm(type){
+        document.getElementById("user-login").style.display = "none";
+        document.getElementById("admin-login").style.display = "none";
+        document.getElementById("admin-panel").style.display = "none";
+        if (type === "user") {
+            document.getElementById("user-login").style.display = "block";
+        } else if (type === "admin") {
+            document.getElementById("admin-login").style.display = "block";
+        }
     }
-  } else {
-    cart[id] = 1;
-  }
 
-  renderCart();
-  renderProducts();
-  showSidebar();
-  showInvoice(); // Hiển thị hóa đơn tạm tính sau khi thêm
-}
+    // Admin Login
+    function loginAdmin(){
+        const user=document.getElementById('admin-username').value.trim();
+        const pass=document.getElementById('admin-password').value.trim();
+        if(user===ADMIN_USER && pass===ADMIN_PASS){
+            isAdmin=true;
+            alert("✅ Đăng nhập ADMIN thành công!");
+            document.getElementById("admin-login").style.display="none";
+            document.getElementById("admin-panel").style.display="block";
+        }else{
+            alert("❌ Sai tài khoản hoặc mật khẩu Admin!");
+        }
+    }
 
-function renderCart() {
-  cartTableBody.innerHTML = '';
-  let total = 0;
+    // User Login
+    function loginUser(){
+        const name=document.getElementById('user-name').value;
+        if(!name) return alert("Vui lòng nhập tên!");
+        alert("Chào mừng, " + name + "!");
+        document.getElementById("user-login").style.display="none";
+    }
 
-  if (Object.keys(cart).length === 0) {
-    sidebar.style.display = 'none';
-    invoiceDiv.style.display = 'none';
-    return;
-  }
+    // Thêm sản phẩm (Dành cho Admin)
+    function addProduct(){
+        const name=document.getElementById("newName").value.trim();
+        const price=parseInt(document.getElementById("newPrice").value);
+        const brand=document.getElementById("newBrand").value.trim();
+        const stock=parseInt(document.getElementById("newStock").value);
+        const img=document.getElementById("newImg").value.trim();
+        if(!name||!price||!brand||!stock||!img){alert("Vui lòng nhập đầy đủ!");return;}
+        const id="DT"+String(products.length+1).padStart(2,"0");
+        products.push({id,name,price,brand,stock,img});
+        sortAndFilter(); // Cập nhật lại danh sách sau khi thêm
+        alert("✅ Đã thêm sản phẩm!");
+    }
 
-  for (const id in cart) {
-    const product = products.find(p => p.id === id);
-    const qty = cart[id];
-    const subtotal = product.price * qty;
-    total += subtotal;
+    // Render Products (Sử dụng hàm mới để hỗ trợ sắp xếp/lọc)
+    function renderProducts(listToRender){
+        const list=document.getElementById('product-list');
+        list.innerHTML=listToRender.map(p=>`
+            <div class="product">
+                <img src="${p.img}" alt="${p.name}">
+                <h3>${p.name}</h3>
+                <p class="price">${formatPrice(p.price)}</p>
+                <p class="stock">Tồn kho: ${p.stock}</p>
+                <button onclick="addToCart('${p.id}')" ${p.stock<=0?'disabled':''}>
+                    ${p.stock<=0 ? 'Hết hàng' : 'Thêm vào giỏ'}
+                </button>
+            </div>
+        `).join('');
+    }
 
-    cartTableBody.innerHTML += `
-      <tr>
-        <td>${product.name}</td>
-        <td>${formatPrice(product.price)}</td>
-        <td>
-          <button onclick="decreaseQty('${id}')">-</button>
-          ${qty}
-          <button onclick="increaseQty('${id}')">+</button>
-        </td>
-        <td>${formatPrice(subtotal)}</td>
-        <td><button onclick="removeFromCart('${id}')">Xóa</button></td>
-      </tr>
-    `;
-  }
+    // Sắp xếp và Lọc sản phẩm
+    function sortAndFilter() {
+        let filteredProducts = [...products]; // Tạo bản sao
 
-  totalSpan.textContent = formatPrice(total);
-  sidebar.style.display = 'flex';
-}
+        // Lọc theo hãng
+        const brandFilter = document.getElementById('filter-brand').value;
+        if (brandFilter !== 'all') {
+            filteredProducts = filteredProducts.filter(p => p.brand === brandFilter);
+        }
 
-function increaseQty(id) {
-  const product = products.find(p => p.id === id);
-  if (cart[id] < product.stock) {
-    cart[id]++;
-    renderCart();
-    showInvoice();
-  } else {
-    alert(`Sản phẩm ${product.name} chỉ còn ${product.stock} cái.`);
-  }
-}
+        // Sắp xếp
+        const sortBy = document.getElementById('sort-by').value;
+        switch (sortBy) {
+            case 'price-asc':
+                filteredProducts.sort((a, b) => a.price - b.price);
+                break;
+            case 'price-desc':
+                filteredProducts.sort((a, b) => b.price - a.price);
+                break;
+            case 'name-asc':
+                filteredProducts.sort((a, b) => a.name.localeCompare(b.name, 'vi'));
+                break;
+            case 'default':
+            default:
+                // Giữ nguyên thứ tự ban đầu (hoặc sắp xếp theo ID)
+                filteredProducts.sort((a, b) => a.id.localeCompare(b.id)); 
+                break;
+        }
 
-function decreaseQty(id) {
-  if (cart[id] > 1) {
-    cart[id]--;
-  } else {
-    delete cart[id];
-  }
-  renderCart();
-  showInvoice();
-  if (Object.keys(cart).length === 0) {
-    sidebar.style.display = 'none';
-  }
-}
+        renderProducts(filteredProducts);
+    }
+    
+    sortAndFilter(); // Gọi lần đầu để hiển thị sản phẩm
 
-function removeFromCart(id) {
-  delete cart[id];
-  renderCart();
-  showInvoice();
-  if (Object.keys(cart).length === 0) {
-    sidebar.style.display = 'none';
-  }
-}
+    /* === CART & CHECKOUT === */
+    function addToCart(id){
+        const p=products.find(x=>x.id===id);
+        if(p.stock<=0){alert("Hết hàng!");return;}
+        cart[id]=(cart[id]||0)+1;
+        if(cart[id]>p.stock){cart[id]=p.stock;alert(`Chỉ còn ${p.stock} sản phẩm!`);}
+        renderCart();
+    }
+    
+    function renderCart(){
+        const body=document.getElementById('cart-body');
+        body.innerHTML="";
+        let total=0;
+        for(const id in cart){
+            const p=products.find(x=>x.id===id);
+            total+=p.price*cart[id];
+            body.innerHTML+=`<tr>
+                <td style="text-align:left;">${p.name.substring(0,15)}...</td>
+                <td>${formatPrice(p.price)}</td>
+                <td>${cart[id]}</td>
+                <td><button onclick="removeItem('${id}')" style="background: none; border: none; color: #dc3545; font-size: 16px; padding: 0;">❌</button></td>
+            </tr>`;
+        }
+        document.getElementById('total').textContent=formatPrice(total);
+        if (Object.keys(cart).length > 0) {
+            document.getElementById('sidebar').style.display = "block";
+        } else {
+            document.getElementById('sidebar').style.display = "none";
+        }
+    }
+    function removeItem(id){delete cart[id];renderCart(); sortAndFilter();}
 
-function showSidebar() {
-  sidebar.style.display = 'flex';
-}
+    // Chức năng In Hóa đơn
+    function printInvoice(cartDetails, total) {
+        let invoiceContent = `
+            <!DOCTYPE html>
+            <html lang="vi">
+            <head>
+                <title>Hóa đơn Thanh toán</title>
+                <style>
+                    body { font-family: Tahoma, sans-serif; padding: 20px; }
+                    .invoice { width: 600px; margin: 0 auto; border: 1px solid #ccc; padding: 30px; }
+                    h2 { text-align: center; color: #007bff; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                    th { background-color: #f2f2f2; }
+                    .total-row td { font-weight: bold; border-top: 2px solid #000; }
+                    .center { text-align: center; margin-top: 30px; }
+                </style>
+            </head>
+            <body>
+                <div class="invoice">
+                    <h2>🧾 HÓA ĐƠN MUA HÀNG</h2>
+                    <p><strong>Ngày:</strong> ${new Date().toLocaleDateString('vi-VN')}</p>
+                    <p><strong>Cửa hàng:</strong> Shop Điện Thoại VIP</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tên sản phẩm</th>
+                                <th style="text-align: right;">Giá</th>
+                                <th style="text-align: center;">Số lượng</th>
+                                <th style="text-align: right;">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${cartDetails}
+                            <tr class="total-row">
+                                <td colspan="3" style="text-align: right;">TỔNG CỘNG</td>
+                                <td style="text-align: right;">${formatPrice(total)}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="center">
+                        <p>Cảm ơn quý khách đã mua hàng!</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `;
 
-function showInvoice() {
-  if (Object.keys(cart).length === 0) {
-    invoiceDiv.style.display = 'none';
-    invoiceDiv.innerHTML = '';
-    return;
-  }
+        const win = window.open('', 'Print', 'height=600,width=800');
+        win.document.write(invoiceContent);
+        win.document.close();
+        win.print();
+    }
 
-  let html = `<h2>🧾 Hóa đơn tạm tính</h2>`;
-  html += `<table>
-    <thead>
-      <tr>
-        <th>Tên</th>
-        <th>Số lượng</th>
-        <th>Đơn giá</th>
-        <th>Thành tiền</th>
-      </tr>
-    </thead>
-    <tbody>`;
 
-  let total = 0;
-  for (const id in cart) {
-    const product = products.find(p => p.id === id);
-    const qty = cart[id];
-    const subtotal = product.price * qty;
-    total += subtotal;
+    // Checkout
+    function checkout() {
+        if (Object.keys(cart).length === 0) {
+            alert("Giỏ hàng trống! Vui lòng thêm sản phẩm.");
+            return;
+        }
 
-    html += `
-      <tr>
-        <td>${product.name}</td>
-        <td>${qty}</td>
-        <td>${formatPrice(product.price)}</td>
-        <td>${formatPrice(subtotal)}</td>
-      </tr>
-    `;
-  }
+        let total = 0;
+        let cartDetailsHTML = ""; 
 
-  html += `</tbody></table>`;
-  html += `<h3>Tổng cộng: ${formatPrice(total)}</h3>`;
+        for (const id in cart) {
+            const p = products.find(x => x.id === id);
+            const quantity = cart[id];
+            const subTotal = p.price * quantity;
 
-  invoiceDiv.innerHTML = html;
-  invoiceDiv.style.display = 'block';
-}
+            p.stock -= quantity; // Cập nhật tồn kho
+            
+            cartDetailsHTML += `
+                <tr>
+                    <td>${p.name}</td>
+                    <td style="text-align: right;">${formatPrice(p.price)}</td>
+                    <td style="text-align: center;">${quantity}</td>
+                    <td style="text-align: right;">${formatPrice(subTotal)}</td>
+                </tr>
+            `;
 
-function checkout() {
-  if (Object.keys(cart).length === 0) {
-    alert("Giỏ hàng đang trống!");
-    return;
-  }
+            total += subTotal;
+        }
 
-  const paymentMethod = paymentSelect.value;
-  alert(`Cảm ơn bạn đã đặt hàng.\nPhương thức thanh toán: ${paymentMethod.toUpperCase()}`);
-
-  // Xóa giỏ hàng và ẩn sidebar + hóa đơn
-  cart = {};
-  renderCart();
-  invoiceDiv.style.display = 'none';
-  sidebar.style.display = 'none';
-}
-
-renderProducts();
+        printInvoice(cartDetailsHTML, total); // Xuất hóa đơn
+        alert("✅ Đặt hàng thành công! Vui lòng kiểm tra hóa đơn.");
+        
+        cart = {}; // Xóa giỏ hàng
+        renderCart();
+        sortAndFilter(); // Cập nhật lại danh sách để thấy thay đổi tồn kho
+    }
 </script>
-
 </body>
 </html>
+
 
